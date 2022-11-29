@@ -1,0 +1,19 @@
+.main {
+    margin: 0 375px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+}
+
+.main > img {
+    margin: auto;
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+}
+
+h1 {
+    text-align: center;
+    font-family: 'VT323', monospace;
+    font-size: 60px;
+    margin: 20px auto;
+}
