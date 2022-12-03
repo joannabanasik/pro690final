@@ -1,5 +1,5 @@
 # pro690final
-This repository contains code for Final Exam
+This repository contains code for PRO690 Final Exam
 
 # Code owners
 - Joanna Banasik
