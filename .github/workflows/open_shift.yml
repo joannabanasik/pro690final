@@ -47,7 +47,12 @@ jobs:
       - name: Install Red Hat OpenShift GitOps
         shell: bash
         run: |
-          oc apply -f ./crd/argocd/argocd-sub.yaml
+          oc apply -f ./crd/openshift-gitops-sub.yaml
+      
+      - name: Install ArgoCD
+        shell: bash
+        run: |
+          oc apply -f ./crd/argocd-sub.yaml
 
           sleep 120
           TIMEOUT=0 
