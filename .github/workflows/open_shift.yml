@@ -44,6 +44,11 @@ jobs:
           app_name: pro690final
           image: ${{ env.USERNAME}}/${{ env.IMAGE_NAME}}
 
+      - name: Create new project in OpenShift
+        shell: bash
+        run: |
+          oc new-project argocd || oc project argocd
+      
       - name: Install Red Hat OpenShift GitOps
         shell: bash
         run: |
