@@ -8,6 +8,9 @@ on:
     branches:
       - main
 
+env:
+  USERNAME: jbanasik
+
 jobs:
 
   cicd:
@@ -19,16 +22,16 @@ jobs:
       
       - name: Build and Push the Docker image to DockerHub
         run: |
-          echo "${{ secrets.DOCKERHUBPASSWORD}}" | docker login -u "${{ secrets.DOCKERHUBUSERNAME}}" --password-stdin
-          docker build . --file Dockerfile --tag ${{ secrets.DOCKERHUBUSERNAME}}/pro690image
-          docker push ${{ secrets.DOCKERHUBUSERNAME}}/pro690image
+          echo "${{ secrets.DOCKERHUBPASSWORD}}" | docker login -u "${{ env.USERNAME}}" --password-stdin
+          docker build . --file Dockerfile --tag ${{ env.USERNAME}}/pro690image
+          docker push ${{ env.USERNAME}}/pro690image
       
       - name: Authenticate with OpenShift and set context
         uses: redhat-actions/oc-login@v1
 
         with:
           # URL to your OpenShift cluster.
-          openshift_server_url: https://api.kaz6tlq7.eastus.aroapp.io:6443/
+          openshift_server_url: https://api.ou8lcy7i.eastus.aroapp.io:6443/
 
           # Authentication 
           openshift_username: kubeadmin
@@ -42,4 +45,4 @@ jobs:
 
         with:
           app_name: pro690final
-          image: ${{ secrets.DOCKERHUBUSERNAME}}/pro690image
+          image: ${{ env.USERNAME}}/pro690image
