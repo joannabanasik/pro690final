@@ -1,0 +1,45 @@
+name: Open Shift
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+
+  cicd:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Git repository
+        uses: actions/checkout@v3  
+      
+      - name: Build and Push the Docker image to DockerHub
+        run: |
+          echo "${{ secrets.DOCKERHUBPASSWORD}}" | docker login -u "${{ secrets.DOCKERHUBUSERNAME}}" --password-stdin
+          docker build . --file Dockerfile --tag ${{ secrets.DOCKERHUBUSERNAME}}/pro690image
+          docker push ${{ secrets.DOCKERHUBUSERNAME}}/pro690image
+      
+      - name: Authenticate with OpenShift and set context
+        uses: redhat-actions/oc-login@v1
+
+        with:
+          # URL to your OpenShift cluster.
+          openshift_server_url: https://api.kaz6tlq7.eastus.aroapp.io:6443/
+
+          # Authentication 
+          openshift_username: kubeadmin
+          openshift_password: ${{ secrets.OPENSHIFT_PASSWORD }}
+
+          # Disables SSL cert checking. Use this if you don't have the certificate authority data.
+          insecure_skip_tls_verify: true
+      
+      - name: Deploy and expose a single-container application on OpenShift
+        uses: redhat-actions/oc-new-app@v1.2
+
+        with:
+          app_name: pro690final
+          image: ${{ secrets.DOCKERHUBUSERNAME}}/pro690image
