@@ -43,8 +43,12 @@ jobs:
         with:
           app_name: pro690final
           image: ${{ env.USERNAME}}/${{ env.IMAGE_NAME}}
-          namespace: argocd
 
+      - name: Create new project in OpenShift
+        shell: bash
+        run: |
+          oc new-project argocd
+      
       - name: Install ArgoCD
         shell: bash
         run: |
