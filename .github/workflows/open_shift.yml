@@ -10,33 +10,30 @@ on:
 
 env:
   USERNAME: jbanasik
+  IMAGE_NAME: pro690image
 
 jobs:
 
   cicd:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout Git repository
-        uses: actions/checkout@v3  
+        uses: actions/checkout@main
       
       - name: Build and Push the Docker image to DockerHub
         run: |
           echo "${{ secrets.DOCKERHUBPASSWORD}}" | docker login -u "${{ env.USERNAME}}" --password-stdin
-          docker build . --file Dockerfile --tag ${{ env.USERNAME}}/pro690image
-          docker push ${{ env.USERNAME}}/pro690image
+          docker build . --file Dockerfile --tag ${{ env.USERNAME}}/${{ env.IMAGE_NAME}}
+          docker push ${{ env.USERNAME}}/${{ env.IMAGE_NAME}}
       
       - name: Authenticate with OpenShift and set context
         uses: redhat-actions/oc-login@v1
 
         with:
-          # URL to your OpenShift cluster.
-          openshift_server_url: https://api.ou8lcy7i.eastus.aroapp.io:6443/
-
-          # Authentication 
+          openshift_server_url: ${{ secrets.OPENSHIFT_CLUSTER }}
           openshift_username: kubeadmin
           openshift_password: ${{ secrets.OPENSHIFT_PASSWORD }}
-
           # Disables SSL cert checking. Use this if you don't have the certificate authority data.
           insecure_skip_tls_verify: true
       
@@ -45,7 +42,7 @@ jobs:
 
         with:
           app_name: pro690final
-          image: ${{ env.USERNAME}}/pro690image
+          image: ${{ env.USERNAME}}/${{ env.IMAGE_NAME}}
 
       - name: Install ArgoCD
         shell: bash
