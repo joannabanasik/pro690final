@@ -49,6 +49,11 @@ jobs:
         run: |
           oc apply -f ./crd/openshift-gitops-sub.yaml
       
+      - name: Verify if opm is installed
+        shell: bash
+        run: |
+          opm version
+      
       - name: Install ArgoCD
         shell: bash
         run: |
