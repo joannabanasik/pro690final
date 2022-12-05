@@ -48,10 +48,4 @@ jobs:
         shell: bash
         run: |
           oc apply -f ./crd/openshift-gitops-sub.yaml
-      
-      - name: Install ArgoCD
-        shell: bash
-        run: |
-          make deploy IMG=quay.io/my-org/argocd-operator:latest
-
 
